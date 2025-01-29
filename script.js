@@ -1,90 +1,112 @@
-// Настройки
 const config = {
-  musicVolume: 0.3, // Громкость музыки (0-1)
-  soundEnabled: true, // Звуки кнопок включены
+  musicVolume: 0.3,
+  soundEnabled: true,
 };
 
-// Элементы
-let music; // Фоновая музыка
-let musicToggleButton; // Кнопка управления музыкой
+let music;
+let musicToggleButton;
 
-// Инициализация
 document.addEventListener('DOMContentLoaded', () => {
-  // Динамическая загрузка контента
-  const initialPage = window.location.pathname.includes('index') ? 'index' : 'news';
+  // Определение стартовой страницы
+  const pathParts = window.location.pathname.split('/');
+  const currentPage = pathParts[pathParts.length - 1];
+  const initialPage = currentPage === 'index.html' || currentPage === '' ? 'index' : currentPage.replace('.html', '');
+  
   loadContent(initialPage);
 
-  // Музыка
+  // Инициализация музыки
   music = document.getElementById('background-music');
-  music.volume = config.musicVolume;
+  if (music) {
+    music.volume = config.musicVolume;
+    music.play().catch(() => {
+      console.log('Автовоспроизведение заблокировано');
+    });
+  }
 
-  // Кнопка переключения музыки
   createMusicToggleButton();
-
-  // Обработчики кнопок меню
-  document.querySelectorAll('.minecraft-button[data-page]').forEach(button => {
-    button.addEventListener('click', handleButtonClick);
-    button.addEventListener('mouseenter', playButtonSound);
-  });
 });
 
-// Загрузка контента (SPA-подход)
 async function loadContent(page) {
   try {
     const response = await fetch(`content/${page}.html`);
+    if (!response.ok) throw new Error(`Ошибка ${response.status}`);
+    
     const html = await response.text();
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
     
-    document.querySelector('.container').innerHTML = `
-      <h1 class="logo">${page === 'index' ? 'Minecraft Fan Site' : page}</h1>
-      ${doc.querySelector('.content').innerHTML}
+    const container = document.querySelector('.container');
+    container.innerHTML = `
+      <h1 class="logo">${getPageTitle(page)}</h1>
+      ${doc.querySelector('.content')?.innerHTML || ''}
       ${page !== 'index' ? '<button class="minecraft-button" data-page="index">На главную</button>' : ''}
     `;
 
-    // Обновляем обработчики после загрузки
+    // Обновление обработчиков
     document.querySelectorAll('.minecraft-button[data-page]').forEach(btn => {
       btn.addEventListener('click', handleButtonClick);
-      btn.addEventListener('mouseenter', playButtonSound);
+      btn.addEventListener('mouseenter', () => playButtonSound('sounds/click.mp3'));
     });
 
-    // Плавное появление
-    document.querySelector('.content').style.animation = 'slideIn 0.5s ease-out';
+    // Анимация
+    if (document.querySelector('.content')) {
+      document.querySelector('.content').style.animation = 'slideIn 0.5s ease-out';
+    }
+
+    // Обновление URL
+    window.history.replaceState({}, '', page === 'index' ? '/' : `${page}.html`);
+
   } catch (error) {
     console.error('Ошибка загрузки:', error);
+    loadContent('index');
   }
 }
 
-// Обработка кликов
 function handleButtonClick(e) {
   e.preventDefault();
   const page = e.target.getAttribute('data-page');
-  history.pushState({}, '', `${page}.html`);
+  window.history.pushState({}, '', page === 'index' ? '/' : `${page}.html`);
   loadContent(page);
 }
 
-// Звук кнопок
-function playButtonSound() {
+function playButtonSound(soundPath) {
   if (!config.soundEnabled) return;
-  const sound = new Audio('sounds/click.mp3');
+  const sound = new Audio(soundPath);
   sound.volume = 0.3;
   sound.play();
 }
 
-// Управление музыкой
 function createMusicToggleButton() {
   musicToggleButton = document.createElement('button');
   musicToggleButton.id = 'music-toggle';
   musicToggleButton.className = 'minecraft-button';
-  musicToggleButton.innerHTML = '♫ Вкл/Выкл';
+  musicToggleButton.innerHTML = '♫ Вкл музыку';
   musicToggleButton.style.position = 'fixed';
   musicToggleButton.style.bottom = '20px';
   musicToggleButton.style.right = '20px';
 
   musicToggleButton.addEventListener('click', () => {
-    music.paused ? music.play() : music.pause();
-    musicToggleButton.textContent = music.paused ? '♫ Вкл музыку' : '♫ Выкл музыку';
+    if (music.paused) {
+      music.play();
+      musicToggleButton.innerHTML = '♫ Выкл музыку';
+    } else {
+      music.pause();
+      musicToggleButton.innerHTML = '♫ Вкл музыку';
+    }
   });
 
   document.body.appendChild(musicToggleButton);
+}
+
+function getPageTitle(page) {
+  const titles = {
+    'index': 'Minecraft Fan Site',
+    'news': 'Новости',
+    'guides': 'Гайды',
+    'mods': 'Моды',
+    'servers': 'Серверы',
+    'forum': 'Форум',
+    'about': 'О нас'
+  };
+  return titles[page] || 'Minecraft Fan Site';
 }
