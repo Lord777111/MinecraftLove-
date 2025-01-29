@@ -1,0 +1,154 @@
+/* Базовые стили */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Minecraftia', sans-serif;
+  color: #fff;
+  overflow-x: hidden;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Фон */
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../images/minecraft-background.jpg') no-repeat center center/cover;
+  z-index: -1;
+  animation: panBackground 60s linear infinite;
+}
+
+@keyframes panBackground {
+  0% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.1) translate(2%, 2%); }
+  100% { transform: scale(1) translate(0, 0); }
+}
+
+/* Контейнер */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Логотип */
+.logo {
+  font-size: 3.5rem;
+  text-shadow: 4px 4px 0 #000;
+  margin: 2rem 0;
+  letter-spacing: 2px;
+}
+
+/* Меню */
+.menu {
+  display: grid;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+/* Кнопки */
+.minecraft-button {
+  background: 
+    linear-gradient(
+      180deg,
+      rgba(76, 175, 80, 1) 0%,
+      rgba(69, 160, 73, 1) 100%
+    );
+  border: 3px solid #2d572f;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  color: #fff;
+  cursor: pointer;
+  text-shadow: 2px 2px 0 #000;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.minecraft-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.minecraft-button:active {
+  transform: translateY(1px);
+}
+
+/* Контент */
+.content {
+  background: rgba(0, 0, 0, 0.7);
+  border: 3px solid #4CAF50;
+  border-radius: 8px;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 800px;
+  backdrop-filter: blur(5px);
+}
+
+/* Анимации */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-out;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .logo {
+    font-size: 2.5rem;
+  }
+
+  .minecraft-button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .content {
+    padding: 1rem;
+    margin: 1rem;
+  }
+
+  #music-toggle {
+    bottom: 10px;
+    right: 10px;
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Элементы контента */
+.news-item, .guide-item, .mod-item {
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #4CAF50;
+  border-radius: 5px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.mod-icon {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+  margin: 1rem 0;
+}
+
+.download-link {
+  color: #4CAF50;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.download-link:hover {
+  text-decoration: underline;
+}
