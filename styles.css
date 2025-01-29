@@ -9,11 +9,11 @@ body {
   font-family: 'Minecraftia', sans-serif;
   color: #fff;
   overflow-x: hidden;
-  line-height: 1.6;
   min-height: 100vh;
+  background: #1a1a1a;
 }
 
-/* Фон */
+/* Анимация фона */
 .background {
   position: fixed;
   top: 0;
@@ -31,46 +31,44 @@ body {
   100% { transform: scale(1) translate(0, 0); }
 }
 
-/* Контейнер */
+/* Основной контейнер */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Логотип */
 .logo {
-  font-size: 3.5rem;
+  font-size: 3rem;
   text-shadow: 4px 4px 0 #000;
   margin: 2rem 0;
-  letter-spacing: 2px;
+  text-align: center;
 }
 
 /* Меню */
 .menu {
   display: grid;
-  gap: 1.5rem;
-  margin: 2rem 0;
+  gap: 1rem;
+  width: 100%;
+  max-width: 600px;
 }
 
 /* Кнопки */
 .minecraft-button {
-  background: 
-    linear-gradient(
-      180deg,
-      rgba(76, 175, 80, 1) 0%,
-      rgba(69, 160, 73, 1) 100%
-    );
+  background: linear-gradient(180deg, #4CAF50 0%, #45a049 100%);
   border: 3px solid #2d572f;
-  padding: 1rem 2rem;
+  padding: 1rem;
   font-size: 1.2rem;
-  color: #fff;
+  color: white;
   cursor: pointer;
   text-shadow: 2px 2px 0 #000;
   transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
+  width: 100%;
 }
 
 .minecraft-button:hover {
@@ -88,52 +86,46 @@ body {
   border: 3px solid #4CAF50;
   border-radius: 8px;
   padding: 2rem;
-  margin: 2rem auto;
+  margin: 1rem 0;
+  width: 100%;
   max-width: 800px;
   backdrop-filter: blur(5px);
 }
 
-/* Анимации */
+/* Анимация контента */
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(50px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.slide-in {
-  animation: slideIn 0.5s ease-out;
+.content {
+  animation: slideIn 0.3s ease-out;
 }
 
 /* Адаптивность */
 @media (max-width: 768px) {
   .logo {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
-
+  
   .minecraft-button {
-    padding: 0.8rem 1.5rem;
     font-size: 1rem;
+    padding: 0.8rem;
   }
-
+  
   .content {
     padding: 1rem;
-    margin: 1rem;
-  }
-
-  #music-toggle {
-    bottom: 10px;
-    right: 10px;
-    padding: 0.5rem 1rem;
+    margin: 0.5rem;
   }
 }
 
 /* Элементы контента */
-.news-item, .guide-item, .mod-item {
+.news-item, .guide-item, .mod-item, .server-item {
   background: rgba(0, 0, 0, 0.5);
   border: 2px solid #4CAF50;
   border-radius: 5px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  text-align: left;
 }
 
 .mod-icon {
